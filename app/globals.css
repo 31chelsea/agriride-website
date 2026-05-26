@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* AgriRide Theme Colors */
+  --green-dark: #0b3018;
+  --green-primary: #1d8c3c;
+  --green-light: #2ecc5e;
+  --green-pale: #eaf8ee;
+  --yellow: #ffd23f;
+  --orange: #ff7a2f;
+  --cream: #fdf8ef;
+  --cream2: #f5efe0;
+  --white: #ffffff;
+  --text-main: #0e1a13;
+  --text-muted: #5a6b60;
+  
+  /* Shadows */
+  --shadow-sm: 0 4px 15px rgba(0,0,0,0.06);
+  --shadow-md: 0 10px 35px rgba(0,0,0,0.10);
+  --shadow-lg: 0 25px 60px rgba(0,0,0,0.14);
+  
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+
+  /* Design Tokens for shadcn */
+  --background: var(--cream);
+  --foreground: var(--text-main);
+  --card: var(--white);
+  --card-foreground: var(--text-main);
+  --popover: var(--white);
+  --popover-foreground: var(--text-main);
+  --primary: var(--green-primary);
+  --primary-foreground: var(--white);
+  --secondary: var(--green-pale);
+  --secondary-foreground: var(--green-dark);
+  --muted: var(--cream2);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--orange);
+  --accent-foreground: var(--white);
+  --destructive: #ef4444;
+  --destructive-foreground: var(--white);
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: var(--green-primary);
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Fraunces', serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* AgriRide custom colors */
+  --color-green-dark: var(--green-dark);
+  --color-green-primary: var(--green-primary);
+  --color-green-light: var(--green-light);
+  --color-green-pale: var(--green-pale);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
+  --color-cream: var(--cream);
+  --color-cream2: var(--cream2);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    color: var(--green-dark);
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* Animations */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46,204,94,0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(46,204,94,0); }
+}
+
+@keyframes blob-morph {
+  0%, 100% { border-radius: 60% 40% 50% 60% / 50% 60% 40% 60%; }
+  33% { border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; }
+  66% { border-radius: 55% 45% 40% 60% / 45% 55% 65% 35%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes chat-pulse {
+  0%, 100% { box-shadow: 0 8px 28px rgba(11,48,24,0.4); }
+  50% { box-shadow: 0 8px 40px rgba(29,140,60,0.5); }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+@keyframes chat-open {
+  from { transform: scale(0.85) translateY(10px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s infinite;
+}
+
+.animate-blob-morph {
+  animation: blob-morph 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-chat-pulse {
+  animation: chat-pulse 3s ease-in-out infinite;
+}
+
+.animate-typing {
+  animation: typing 1.2s infinite;
+}
+
+.animate-chat-open {
+  animation: chat-open 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Fade up animation */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
