@@ -59,7 +59,7 @@ export default function RegisterPage() {
     
     if (!formData.nim) {
       newErrors.nim = "NIM wajib diisi"
-    } else if (!/^[A-Z][0-9]{9}$/.test(formData.nim)) {
+    } else if (!/^[A-Z][0-9]{10}$/.test(formData.nim)) {
       newErrors.nim = "Format NIM tidak valid (contoh: G1234567890)"
     }
     
@@ -84,11 +84,12 @@ export default function RegisterPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validateForm()) return
-    setIsLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
+  e.preventDefault()
+  if (!validateForm()) return
+  setIsLoading(true)
+
+  const supabase = createClient()
+  const { data, error } = await supabase.auth.signUp({
     email: formData.email,
     password: formData.password,
     options: {
@@ -103,18 +104,16 @@ export default function RegisterPage() {
 
   if (error) {
     setErrors({ email: error.message })
-  } else {
-    const { data: { user } } = await supabase.auth.getUser()
-  
-  await supabase.from('users').insert({
-    id: user?.id,
-    full_name: formData.fullName,
-    email: formData.email,
-    phone: formData.phone,
-    nim: formData.nim,
-    role: userRole,
-    is_verified: false,
-  })
+  } else if (data.user) {
+    await supabase.from('users').insert({
+      id: data.user.id,
+      full_name: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      nim: formData.nim,
+      role: userRole,
+      is_verified: false,
+    })
     router.push("/login?registered=true")
   }
 
