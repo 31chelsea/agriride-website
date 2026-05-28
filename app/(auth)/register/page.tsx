@@ -104,7 +104,17 @@ export default function RegisterPage() {
   if (error) {
     setErrors({ email: error.message })
   } else {
-    // Tampilkan pesan cek email, atau langsung redirect
+    const { data: { user } } = await supabase.auth.getUser()
+  
+  await supabase.from('users').insert({
+    id: user?.id,
+    full_name: formData.fullName,
+    email: formData.email,
+    phone: formData.phone,
+    nim: formData.nim,
+    role: userRole,
+    is_verified: false,
+  })
     router.push("/login?registered=true")
   }
 
