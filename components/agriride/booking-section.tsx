@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMotorcycle, faLocationDot, faBullseye, faCircleInfo } from "@fortawesome/free-solid-svg-icons"
+import { createClient } from "@/lib/supabase"
 
 const pickupLocations = [
   "Gerbang Utama IPB",
@@ -37,14 +38,38 @@ export default function BookingSection() {
     return hasFarRoute ? "Rp 7.500" : "Rp 5.000"
   }, [pickup, dest])
 
-  const handleBook = () => {
-    const showToast = (window as Window & { showAgriRideToast?: (msg: string) => void }).showAgriRideToast
-    if (!pickup || !dest) {
-      showToast?.("⚠️ Pilih lokasi jemput dan tujuan dulu ya!")
-      return
-    }
-    showToast?.(`🛵 Driver ditemukan! Menuju ${pickup}...`)
+  const handleBook = async () => {
+  const supabase = createClient()
+
+  // Cek user sudah login
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    alert("Kamu harus login dulu ya!")
+    return
   }
+
+  if (!pickup || !dest) {
+    alert("⚠️ Pilih lokasi jemput dan tujuan dulu ya!")
+    return
+  }
+
+  const fare = calculateFare() === "Rp 7.500" ? 7500 : 5000
+
+  const { error } = await supabase.from('bookings').insert({
+    passenger_id: user.id,
+    pickup_location: pickup,
+    destination: dest,
+    fare: fare,
+    status: 'waiting',
+  })
+
+  if (error) {
+    alert("Gagal memesan: " + error.message)
+    return
+  }
+
+  alert("🛵 Driver ditemukan! Menuju " + pickup + "...")
+}
 
   return (
     <section id="pesan" className="max-w-[1200px] mx-auto px-7 py-20">
